@@ -10,6 +10,21 @@ import { Project } from "../types";
 import TagInput from "../components/TagInput";
 import ImageUploader from "../components/ImageUploader";
 
+async function readApiJson(res: Response) {
+  const contentType = res.headers.get("content-type") || "";
+  const text = await res.text();
+
+  if (!contentType.includes("application/json")) {
+    throw new Error(text.slice(0, 140) || `Expected JSON but received ${contentType || "an empty response"}.`);
+  }
+
+  try {
+    return JSON.parse(text);
+  } catch {
+    throw new Error(text.slice(0, 140) || "The API returned invalid JSON.");
+  }
+}
+
 export default function AdminPage() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [password, setPassword] = useState("");
@@ -61,7 +76,7 @@ export default function AdminPage() {
       });
 
       if (res.ok) {
-        const savedProject = await res.json();
+        const savedProject = await readApiJson(res);
         if (isEdit) {
           setProjects(projects.map(p => p.id === savedProject.id ? savedProject : p));
         } else {
@@ -69,7 +84,7 @@ export default function AdminPage() {
         }
         setEditingProject(null);
       } else {
-        const errData = await res.json();
+        const errData = await readApiJson(res).catch((err) => ({ error: err.message }));
         setProjectFormError(errData.error || "Failed to save project.");
       }
     } catch (err) {
@@ -122,19 +137,19 @@ export default function AdminPage() {
       ]);
       
       if (statusRes.ok) {
-        setSupabaseStatus(await statusRes.json());
+        setSupabaseStatus(await readApiJson(statusRes));
       }
 
       if (projectsRes.ok) {
-        setProjects(await projectsRes.json());
+        setProjects(await readApiJson(projectsRes));
         setProjectLoadError(null);
       } else {
-        const errData = await projectsRes.json();
+        const errData = await readApiJson(projectsRes).catch((err) => ({ error: err.message }));
         setProjectLoadError(errData.error || "Failed to load projects from Supabase.");
       }
 
       if (inquiriesRes.ok) {
-        setInquiries(await inquiriesRes.json());
+        setInquiries(await readApiJson(inquiriesRes));
       }
     } catch (err: any) {
       console.error("Failed to load initial data:", err);
