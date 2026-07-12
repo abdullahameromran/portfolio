@@ -1,0 +1,6 @@
+{
+  "name": "Abdullah Omran Portfolio",
+  "description": "Interactive portfolio of Abdullah Omran, featuring his expert Bubble.io & traditional Next.js/Supabase SaaS and AI automation blueprints, an interactive project estimator, and a Virtual AI Assistant.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
