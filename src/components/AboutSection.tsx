@@ -90,7 +90,7 @@ export default function AboutSection() {
           <div className="relative overflow-hidden rounded-2xl border border-slate-800 bg-slate-950 p-2">
             <div className="relative aspect-square w-full overflow-hidden rounded-xl bg-slate-900 border border-slate-800/60">
               <img
-                src="/src/assets/images/abdullah_avatar.png"
+                src="/images/abdullah_avatar.png"
                 alt="Abdullah Omran Portrait"
                 referrerPolicy="no-referrer"
                 className="h-full w-full object-cover transition-transform duration-700 hover:scale-105"

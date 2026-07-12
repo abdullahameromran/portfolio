@@ -19,7 +19,7 @@ const defaultProjects: Project[] = [
       { table: "User (Consultants & Clients)", fields: ["Email", "Role", "Stripe_Customer_ID", "Consultant_Reference", "Status"] },
       { table: "Tax_Dossier", fields: ["Dossier_ID", "Owner_User", "Tax_Year", "State_Jurisdiction", "Raw_Inputs_JSON", "Status"] }
     ],
-    imageUrl: "/src/assets/images/acapolite_mockup_1783694349319.jpg"
+    imageUrl: "/images/acapolite_mockup_1783694349319.jpg"
   },
   {
     id: "genexam",
@@ -37,7 +37,7 @@ const defaultProjects: Project[] = [
     dbStructure: [
       { table: "Assessment_Draft", fields: ["ID", "Instructor_ID", "Syllabus_Tags", "Questions_JSON", "Active_State"] }
     ],
-    imageUrl: "/src/assets/images/genexam_mockup_1783694362695.jpg"
+    imageUrl: "/images/genexam_mockup_1783694362695.jpg"
   }
 ];
 

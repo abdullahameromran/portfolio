@@ -167,7 +167,7 @@ let memoryProjects = [
       { table: "Report_Document", fields: ["Document_ID", "Dossier_Reference", "File_Storage_URL", "PDF_Mime_Type", "Created_Date"] },
       { table: "Subscription_State", fields: ["Subscription_ID", "Active_User", "Stripe_Subscription_ID", "Plan_Type", "Expiry_Date"] }
     ],
-    imageUrl: "/src/assets/images/acapolite_mockup_1783694349319.jpg"
+    imageUrl: "/images/acapolite_mockup_1783694349319.jpg"
   },
   {
     id: "genexam",
@@ -193,7 +193,7 @@ let memoryProjects = [
       { table: "Assessment_Draft", fields: ["ID", "Instructor_ID", "Syllabus_Tags", "Difficulty_Gating", "Questions_JSON", "Active_State"] },
       { table: "Student_Response", fields: ["ID", "Assessment_ID", "Student_Name", "Answers_JSON", "AI_Feedback_Markdown", "Numeric_Score"] }
     ],
-    imageUrl: "/src/assets/images/genexam_mockup_1783694362695.jpg"
+    imageUrl: "/images/genexam_mockup_1783694362695.jpg"
   },
   {
     id: "wishergiver",
@@ -219,7 +219,7 @@ let memoryProjects = [
       { table: "Registry_Item", fields: ["Item_ID", "Registry_Reference", "Product_Name", "Price", "Reserved_By_User", "Purchase_State"] },
       { table: "Split_Transaction", fields: ["Tx_ID", "Total_Amount", "Merchant_Payout", "Platform_Commission", "Stripe_Charge_ID"] }
     ],
-    imageUrl: "/src/assets/images/wishergiver_mockup_1783694374358.jpg"
+    imageUrl: "/images/wishergiver_mockup_1783694374358.jpg"
   }
 ];
 

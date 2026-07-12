@@ -162,7 +162,7 @@ export default function HeroSection({ onNavigate }: HeroSectionProps) {
             >
               <div className="relative h-64 w-64 sm:h-72 sm:w-72 rounded-3xl overflow-hidden border-2 border-slate-800 bg-slate-950/80 shadow-2xl group">
                 <img
-                  src="/src/assets/images/abdullah_avatar.png"
+                  src="/images/abdullah_avatar.png"
                   alt="Abdullah Omran Profile Portrait"
                   referrerPolicy="no-referrer"
                   className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"

@@ -12,7 +12,7 @@ values
  '[]'::jsonb,
  '[]'::jsonb,
  '[]'::jsonb,
- '/src/assets/images/acapolite_mockup_1783694349319.jpg',
+ '/images/acapolite_mockup_1783694349319.jpg',
  '[]'::jsonb,
  NULL,
  now()
@@ -29,7 +29,7 @@ values
  '[]'::jsonb,
  '[]'::jsonb,
  '[]'::jsonb,
- '/src/assets/images/genexam_mockup_1783694362695.jpg',
+ '/images/genexam_mockup_1783694362695.jpg',
  '[]'::jsonb,
  NULL,
  now()
@@ -46,7 +46,7 @@ values
  '[]'::jsonb,
  '[]'::jsonb,
  '[]'::jsonb,
- '/src/assets/images/wishergiver_mockup_1783694374358.jpg',
+ '/images/wishergiver_mockup_1783694374358.jpg',
  '[]'::jsonb,
  NULL,
  now()
