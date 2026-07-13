@@ -260,9 +260,9 @@ export default function HeroSection({ onNavigate }: HeroSectionProps) {
       >
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-48 w-48 rounded-full bg-indigo-500/5 blur-3xl" />
         <Zap className="h-10 w-10 text-amber-400 mx-auto" />
-        <h3 className="font-display text-2xl font-bold text-white">The 5-Day MVP Methodology</h3>
+        <h3 className="font-display text-2xl font-bold text-white">The 5-Day MVP Build Plan</h3>
         <p className="text-slate-400 text-sm md:text-base leading-relaxed">
-          "My goal is not just to build screens—I help you build a product foundation that can validate fast, support real users, and scale toward serious revenue goals. For simple to medium MVPs, we can deploy a fully functional first version in as little as 5 days."
+          "My goal is not just to build screens. I help you launch a usable MVP with the core workflows, database, integrations, and launch setup needed to validate with real users. For simple to medium MVPs, we can deploy a functional first version in as little as 5 days."
         </p>
         <div className="flex justify-center gap-4 pt-2">
           <motion.div 
@@ -272,7 +272,7 @@ export default function HeroSection({ onNavigate }: HeroSectionProps) {
             className="flex flex-col items-center"
           >
             <span className="text-white font-bold font-display text-lg">Day 1</span>
-            <span className="text-slate-500 text-xs">User Flow & DB Design</span>
+            <span className="text-slate-500 text-xs">Scope, User Flow & Data Model</span>
           </motion.div>
           <div className="h-8 w-[1px] bg-slate-800 self-center" />
           <motion.div 
@@ -282,7 +282,7 @@ export default function HeroSection({ onNavigate }: HeroSectionProps) {
             className="flex flex-col items-center"
           >
             <span className="text-white font-bold font-display text-lg">Day 2-3</span>
-            <span className="text-slate-500 text-xs">Core UI & Logic</span>
+            <span className="text-slate-500 text-xs">Main Screens & Product Logic</span>
           </motion.div>
           <div className="h-8 w-[1px] bg-slate-800 self-center" />
           <motion.div 
@@ -292,7 +292,7 @@ export default function HeroSection({ onNavigate }: HeroSectionProps) {
             className="flex flex-col items-center"
           >
             <span className="text-white font-bold font-display text-lg">Day 4</span>
-            <span className="text-slate-500 text-xs">Auth, Stripe & APIs</span>
+            <span className="text-slate-500 text-xs">Core MVP Features & Integrations</span>
           </motion.div>
           <div className="h-8 w-[1px] bg-slate-800 self-center" />
           <motion.div 
@@ -302,7 +302,7 @@ export default function HeroSection({ onNavigate }: HeroSectionProps) {
             className="flex flex-col items-center"
           >
             <span className="text-white font-bold font-display text-lg">Day 5</span>
-            <span className="text-slate-500 text-xs">Test, Optimize & Launch</span>
+            <span className="text-slate-500 text-xs">QA, Polish, Deploy & Handoff</span>
           </motion.div>
         </div>
       </motion.div>
