@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { ArrowUpRight, Database, ExternalLink, Code2, CheckCircle, Activity, Globe, Info, Sparkles, X, Loader2 } from "lucide-react";
+import { ChevronLeft, ChevronRight, Database, ExternalLink, CheckCircle, Activity, Info, X, Loader2 } from "lucide-react";
 import { Project } from "../types";
 
 export default function ProjectsSection() {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [activeFilter, setActiveFilter] = useState<string>("All");
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(false);
@@ -50,6 +51,37 @@ export default function ProjectsSection() {
   const filteredProjects = activeFilter === "All"
     ? projects
     : projects.filter(p => p.category === activeFilter);
+
+  const closeProjectModal = () => {
+    setSelectedProject(null);
+    setSelectedImageIndex(0);
+  };
+
+  useEffect(() => {
+    if (!selectedProject) return;
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      const images = getProjectImages(selectedProject);
+      if (event.key === "Escape") {
+        closeProjectModal();
+      }
+      if (event.key === "ArrowRight" && images.length > 1) {
+        setSelectedImageIndex((current) => (current + 1) % images.length);
+      }
+      if (event.key === "ArrowLeft" && images.length > 1) {
+        setSelectedImageIndex((current) => (current - 1 + images.length) % images.length);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [selectedProject]);
 
   return (
     <div className="space-y-10 py-4">
@@ -170,7 +202,10 @@ export default function ProjectsSection() {
                 )}
 
                 <button
-                  onClick={() => setSelectedProject(project)}
+                  onClick={() => {
+                    setSelectedImageIndex(0);
+                    setSelectedProject(project);
+                  }}
                   className="w-full mt-4 group/btn inline-flex items-center justify-center gap-2 rounded-xl bg-slate-900 border border-slate-800 py-2.5 text-xs font-semibold text-slate-300 transition-all hover:bg-slate-800 hover:text-white"
                 >
                   Inspect Technical Blueprint
@@ -189,18 +224,28 @@ export default function ProjectsSection() {
         {selectedProject && (
           (() => {
             const selectedImages = getProjectImages(selectedProject);
+            const activeImage = selectedImages[selectedImageIndex] || selectedImages[0];
+            const showImageControls = selectedImages.length > 1;
             return (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 backdrop-blur-md bg-slate-950/80">
+          <div
+            className="fixed inset-0 z-50 grid place-items-center overflow-y-auto bg-slate-950/85 p-4 py-8 backdrop-blur-md"
+            onMouseDown={(event) => {
+              if (event.target === event.currentTarget) {
+                closeProjectModal();
+              }
+            }}
+          >
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
-              className="relative w-full max-w-4xl max-h-[90vh] overflow-y-auto rounded-3xl border border-slate-800 bg-slate-950 p-6 md:p-8 text-left shadow-2xl"
+              className="relative my-auto w-full max-w-5xl max-h-[calc(100vh-4rem)] overflow-y-auto rounded-3xl border border-slate-800 bg-slate-950 p-5 text-left shadow-2xl md:p-8"
             >
               {/* Close Button */}
               <button
-                onClick={() => setSelectedProject(null)}
-                className="absolute top-4 right-4 rounded-xl border border-slate-800 bg-slate-900/50 p-2 text-slate-400 transition-all hover:bg-slate-800 hover:text-white"
+                onClick={closeProjectModal}
+                className="sticky left-full top-0 z-20 -mb-10 rounded-xl border border-slate-800 bg-slate-900/90 p-2 text-slate-400 transition-all hover:bg-slate-800 hover:text-white"
+                aria-label="Close project details"
               >
                 <X className="h-5 w-5" />
               </button>
@@ -220,36 +265,62 @@ export default function ProjectsSection() {
                 </div>
 
                 {/* Hero Image in Modal */}
-                {selectedImages.length > 0 ? (
-                  <div className="relative aspect-[21/9] w-full overflow-hidden rounded-2xl border border-slate-800/80 bg-slate-900 shadow-xl">
+                {activeImage ? (
+                  <div className="relative aspect-[16/9] w-full overflow-hidden rounded-2xl border border-slate-800/80 bg-slate-900 shadow-xl">
                     <img
-                      src={selectedImages[0]}
-                      alt={selectedProject.title}
+                      src={activeImage}
+                      alt={`${selectedProject.title} screenshot ${selectedImageIndex + 1}`}
                       referrerPolicy="no-referrer"
-                      className="h-full w-full object-cover"
+                      className="h-full w-full object-contain"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-slate-950/50 via-transparent to-transparent" />
+                    {showImageControls && (
+                      <>
+                        <button
+                          type="button"
+                          onClick={() => setSelectedImageIndex((current) => (current - 1 + selectedImages.length) % selectedImages.length)}
+                          className="absolute left-3 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-slate-700 bg-slate-950/80 text-white transition-all hover:bg-blue-600"
+                          aria-label="Previous project image"
+                        >
+                          <ChevronLeft className="h-5 w-5" />
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setSelectedImageIndex((current) => (current + 1) % selectedImages.length)}
+                          className="absolute right-3 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-slate-700 bg-slate-950/80 text-white transition-all hover:bg-blue-600"
+                          aria-label="Next project image"
+                        >
+                          <ChevronRight className="h-5 w-5" />
+                        </button>
+                        <span className="absolute bottom-3 right-3 rounded-md border border-slate-700 bg-slate-950/80 px-2.5 py-1 text-[11px] font-semibold text-slate-200">
+                          {selectedImageIndex + 1} / {selectedImages.length}
+                        </span>
+                      </>
+                    )}
                   </div>
                 ) : null}
 
                 {selectedImages.length > 1 && (
-                  <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
-                    {selectedImages.slice(1).map((image, imageIndex) => (
-                      <a
+                  <div className="flex gap-3 overflow-x-auto pb-1">
+                    {selectedImages.map((image, imageIndex) => (
+                      <button
                         key={image}
-                        href={image}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="aspect-[16/9] overflow-hidden rounded-xl border border-slate-800 bg-slate-900 transition-all hover:border-blue-500/60"
+                        type="button"
+                        onClick={() => setSelectedImageIndex(imageIndex)}
+                        className={`h-20 w-32 flex-shrink-0 overflow-hidden rounded-xl border bg-slate-900 transition-all ${
+                          selectedImageIndex === imageIndex
+                            ? "border-blue-500 ring-2 ring-blue-500/30"
+                            : "border-slate-800 hover:border-blue-500/60"
+                        }`}
                       >
                         <img
                           src={image}
-                          alt={`${selectedProject.title} screenshot ${imageIndex + 2}`}
+                          alt={`${selectedProject.title} thumbnail ${imageIndex + 1}`}
                           referrerPolicy="no-referrer"
                           loading="lazy"
                           className="h-full w-full object-cover"
                         />
-                      </a>
+                      </button>
                     ))}
                   </div>
                 )}
