@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Routes, Route, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "motion/react";
-import { Bot, Zap, Briefcase, User, Info, MapPin, Award, ExternalLink, Menu, X, ArrowUpRight, Settings } from "lucide-react";
+import { Bot, Zap, Briefcase, User, Info, MapPin, Award, ExternalLink, Menu, X, ArrowUpRight } from "lucide-react";
 import HeroSection from "./components/HeroSection";
 import ProjectsSection from "./components/ProjectsSection";
 import AIAssistantSection from "./components/AIAssistantSection";
@@ -41,7 +41,6 @@ export default function App() {
     { id: "chat", label: "AI Twin", icon: Bot },
     { id: "estimator", label: "Scope Estimator", icon: Zap },
     { id: "about", label: "About", icon: User },
-    { id: "admin", label: "Admin Control", icon: Settings },
   ];
 
 
