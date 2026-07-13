@@ -341,12 +341,12 @@ Reason: ${techStackRecommendation.reason}
                 {copiedInvoice ? "Quote Copied to Clipboard!" : "Copy Technical Quote"}
               </button>
               <a
-                href="https://www.upwork.com/freelancers/~0199451d37daf25a1e?viewMode=1"
+                href="https://wa.me/201554670453"
                 target="_blank"
                 rel="noreferrer"
                 className="w-full flex items-center justify-center gap-2 rounded-xl bg-blue-600 py-3 text-xs font-bold text-white transition-all hover:bg-blue-500 shadow-md shadow-blue-500/10 group"
               >
-                Book Abdullah on Upwork
+                Chat with Abdullah on WhatsApp
                 <ChevronRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
               </a>
             </div>

@@ -37,7 +37,6 @@ export default function App() {
   const tabs = [
     { id: "overview", label: "Overview", icon: Info },
     { id: "projects", label: "Case Studies", icon: Briefcase },
-    { id: "chat", label: "AI Twin", icon: Bot },
     { id: "estimator", label: "Scope Estimator", icon: Zap },
     { id: "about", label: "About", icon: User },
   ];
@@ -229,12 +228,12 @@ export default function App() {
                 {/* CTA/Actions (Desktop) */}
                 <div className="hidden lg:flex items-center gap-2 flex-shrink-0">
                   <a
-                    href="https://www.upwork.com/freelancers/~0199451d37daf25a1e?viewMode=1"
+                    href="https://wa.me/201554670453"
                     target="_blank"
                     rel="noreferrer"
                     className="inline-flex items-center gap-1 rounded-lg bg-blue-600 px-3 py-1.5 text-[11px] font-bold text-white transition-all hover:bg-blue-500 shadow-md shadow-blue-500/10 group whitespace-nowrap flex-shrink-0"
                   >
-                    Hire
+                    WhatsApp
                     <ArrowUpRight className="h-3 w-3 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 flex-shrink-0" />
                   </a>
                 </div>
@@ -291,12 +290,12 @@ export default function App() {
                       {/* Mobile Hire CTA */}
                       <div className="pt-4 border-t border-slate-800/50">
                         <a
-                          href="https://www.upwork.com/freelancers/~0199451d37daf25a1e?viewMode=1"
+                          href="https://wa.me/201554670453"
                           target="_blank"
                           rel="noreferrer"
                           className="flex w-full items-center justify-center gap-2 rounded-xl bg-blue-600 py-3 text-sm font-bold text-white transition-all hover:bg-blue-500 shadow-md shadow-blue-500/10"
                         >
-                          Hire on Upwork
+                          Chat on WhatsApp
                           <ArrowUpRight className="h-4 w-4" />
                         </a>
                       </div>
@@ -346,12 +345,12 @@ export default function App() {
                 {/* Quick footer indicators */}
                 <div className="flex gap-6">
                   <a
-                    href="https://www.upwork.com/freelancers/~0199451d37daf25a1e?viewMode=1"
+                    href="https://wa.me/201554670453"
                     target="_blank"
                     rel="noreferrer"
                     className="hover:text-blue-400 transition-colors"
                   >
-                    Upwork Profile
+                    WhatsApp
                   </a>
                   <a
                     href="https://github.com/abdullah-omran"
