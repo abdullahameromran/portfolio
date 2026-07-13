@@ -1,6 +1,5 @@
 import express from "express";
 import path from "path";
-import fs from "fs";
 import { createServer as createViteServer } from "vite";
 import { GoogleGenAI } from "@google/genai";
 import { createClient } from "@supabase/supabase-js";
@@ -10,11 +9,9 @@ dotenv.config();
 
 const app = express();
 const PORT = 3000;
-const uploadsDir = path.join(process.cwd(), "assets", "uploads");
 
 app.use(express.json({ limit: '200mb' }));
 app.use(express.urlencoded({ extended: true, limit: '200mb' }));
-app.use("/uploads", express.static(uploadsDir));
 
 // Initialize Gemini safely
 let ai: GoogleGenAI | null = null;
@@ -113,7 +110,7 @@ Write the response in the first-person plural or as Abdullah's AI representative
 });
 
 // ==========================================
-// SUPABASE CLIENT & IN-MEMORY DATABASE ENGINE
+// SUPABASE CLIENT
 // ==========================================
 
 // Safe Lazy Initialization for Supabase to prevent startup crashes
@@ -123,7 +120,7 @@ function getSupabase() {
   if (supabaseClient) return supabaseClient;
   
   const url = process.env.SUPABASE_URL;
-  const key = process.env.SUPABASE_ANON_KEY || process.env.SUPABASE_SERVICE_KEY;
+  const key = process.env.SUPABASE_SERVICE_KEY || process.env.SUPABASE_ANON_KEY;
   
   if (url && url !== "https://your-project.supabase.co" && key && key !== "your-anon-key") {
     try {
@@ -140,101 +137,6 @@ function getSupabase() {
   }
   return null;
 }
-
-// Memory database store for immediate testing (or if Supabase is disconnected)
-let memoryProjects = [
-  {
-    id: "acapolite",
-    title: "Acapolite Consulting — Tax & Client Management Platform",
-    description: "A comprehensive client portal and automated tax reporting SaaS which optimizes consulting workflows.",
-    longDescription: "Acapolite Consulting is a top-tier client management and automated tax filing engine. Abdullah engineered this product on Bubble.io with complex backend schedules and custom JavaScript plug-ins. It empowers tax consultants to onboard clients, store encrypted documents, auto-calculate multi-jurisdiction liabilities, and auto-generate clean PDF dossiers. It also incorporates fully automated Stripe recurring plans and subscription locks.",
-    category: "Client Portal",
-    techStack: ["Bubble.io", "Custom JS Plugins", "Stripe Checkout", "PDF Rendering Engine", "SendGrid API"],
-    metrics: [
-      "Automates 80% of client document filing",
-      "Supports 1,200+ concurrent clients",
-      "Decreased audit-prep cycles from 3 days to 4 minutes"
-    ],
-    features: [
-      "Encrypted Document Safe and custom multi-role file sharing",
-      "Custom JavaScript tax logic engine bypassing standard platform speed limits",
-      "Stripe Customer Billing Portal and automated invoice webhooks",
-      "Dynamic HTML-to-PDF reports compiled automatically with client parameters"
-    ],
-    dbStructure: [
-      { table: "User (Consultants & Clients)", fields: ["Email", "Role", "Stripe_Customer_ID", "Consultant_Reference", "Status"] },
-      { table: "Tax_Dossier", fields: ["Dossier_ID", "Owner_User", "Tax_Year", "State_Jurisdiction", "Raw_Inputs_JSON", "Status"] },
-      { table: "Report_Document", fields: ["Document_ID", "Dossier_Reference", "File_Storage_URL", "PDF_Mime_Type", "Created_Date"] },
-      { table: "Subscription_State", fields: ["Subscription_ID", "Active_User", "Stripe_Subscription_ID", "Plan_Type", "Expiry_Date"] }
-    ],
-    imageUrl: "/images/acapolite_mockup_1783694349319.jpg"
-  },
-  {
-    id: "genexam",
-    title: "Gen Exam Platform",
-    description: "An AI-powered academic assessment builder which instantly drafts syllabus-compliant examinations from textbooks.",
-    longDescription: "Gen Exam is a modern custom-coded Next.js SaaS designed for university departments and tutoring networks. Abdullah constructed the platform using Next.js 14, Tailwind CSS, and Supabase. The product utilizes OpenAI & Gemini API pipelines to digest raw textbook PDFs, map them onto local curriculum hierarchies, and auto-synthesize context-aware multiple-choice, short-answer, and essay exams. It features full grading dashboards and immediate feedback tracking.",
-    category: "SaaS",
-    techStack: ["Next.js", "Supabase DB", "Gemini / OpenAI API", "Tailwind CSS", "Resend SMTP", "Vector Embeddings"],
-    metrics: [
-      "15,000+ custom assessments drafted",
-      "99.4% semantic correctness rating from academics",
-      "SaaS user onboarding in < 20 seconds"
-    ],
-    features: [
-      "Multimodal PDF reading pipeline using vector chunking (RAG)",
-      "Advanced LLM temperature gating for syllabus-compliant question generation",
-      "Interactive student browser testing module with real-time countdown clocks",
-      "Educator analytics gradebooks powered by lightning-fast Supabase aggregation queries"
-    ],
-    dbStructure: [
-      { table: "Institution & Departments", fields: ["ID", "Name", "Plan_Level", "Max_Instructors", "Created_At"] },
-      { table: "Educator_Profile", fields: ["ID", "User_UUID", "Department_ID", "Subject_Specialty", "Invite_Status"] },
-      { table: "Assessment_Draft", fields: ["ID", "Instructor_ID", "Syllabus_Tags", "Difficulty_Gating", "Questions_JSON", "Active_State"] },
-      { table: "Student_Response", fields: ["ID", "Assessment_ID", "Student_Name", "Answers_JSON", "AI_Feedback_Markdown", "Numeric_Score"] }
-    ],
-    imageUrl: "/images/genexam_mockup_1783694362695.jpg"
-  },
-  {
-    id: "wishergiver",
-    title: "Wisher&Giver Dashboard Store",
-    description: "A collaborative social gifting marketplace with real-time product registries and micro-merchant administration panels.",
-    longDescription: "Wisher&Giver is a collaborative gifting social-registry platform designed to link gift creators to social buyers. Built to scale, Abdullah drafted the frontend and admin panels, connecting them to secure Stripe Connect accounts. It implements real-time notifications via webhooks, automated cart tracking, automated shipping splits for micro-merchants, and an automated gifting ticker.",
-    category: "MVP",
-    techStack: ["Bubble.io", "Stripe Connect", "n8n Automation", "Firebase Admin", "Postmark API"],
-    metrics: [
-      "Processed $45,000+ in wish validations",
-      "Onboarded 180+ micro-merchants into dashboards",
-      "Webhook response rate optimized to < 85ms"
-    ],
-    features: [
-      "Stripe Connect custom onboarding flow supporting split checkout commissions",
-      "Real-time registry tracking with state locking preventing double-gifts",
-      "Custom n8n integration pipelines coordinating vendor notifications",
-      "Interactive vendor performance dashboards and shipping state panels"
-    ],
-    dbStructure: [
-      { table: "Merchant_Store", fields: ["Store_ID", "Store_Name", "Stripe_Connect_ID", "Commission_Rate", "Status"] },
-      { table: "Wishlist_Registry", fields: ["Registry_ID", "Creator_User", "Occasion_Date", "Is_Public", "Shareable_Slug"] },
-      { table: "Registry_Item", fields: ["Item_ID", "Registry_Reference", "Product_Name", "Price", "Reserved_By_User", "Purchase_State"] },
-      { table: "Split_Transaction", fields: ["Tx_ID", "Total_Amount", "Merchant_Payout", "Platform_Commission", "Stripe_Charge_ID"] }
-    ],
-    imageUrl: "/images/wishergiver_mockup_1783694374358.jpg"
-  }
-];
-
-let memoryInquiries = [
-  {
-    id: "demo-inq-1",
-    client_name: "Sarah Jenkins",
-    client_email: "sarah@startupflow.io",
-    project_idea: "We want to build a real estate matchmaking MVP with custom AI listing summarization and standard Stripe matching billing.",
-    tech_stack_recommendation: "Next.js + Supabase (Traditional Full-Stack Code)",
-    estimated_hours: 60,
-    estimated_cost: 1333.20,
-    created_at: new Date().toISOString()
-  }
-];
 
 // Helper to map Supabase database fields to our Project interface
 function mapSupabaseToProject(p: any) {
@@ -261,7 +163,7 @@ app.get("/api/supabase-status", async (req, res) => {
     return res.json({
       configured: false,
       url: process.env.SUPABASE_URL || "",
-      message: "Supabase keys are not configured or are set to placeholder values. Currently operating in High-Fidelity Demo/Fallback mode."
+      message: "Supabase keys are not configured or are set to placeholder values. No local project fallback is enabled."
     });
   }
 
@@ -291,7 +193,7 @@ app.get("/api/supabase-status", async (req, res) => {
   }
 });
 
-// 2. GET Projects (Fetches from Supabase if active, else returns memoryProjects)
+// 2. GET Projects (Supabase only)
 app.get("/api/projects", async (req, res) => {
   const supabase = getSupabase();
   if (supabase) {
@@ -315,7 +217,7 @@ app.get("/api/projects", async (req, res) => {
     }
   }
 
-  return res.json(memoryProjects);
+  return res.status(503).json({ error: "Supabase is required. Projects are not loaded from local fallback data." });
 });
 
 // 3. POST Project (Creates new project)
@@ -374,9 +276,7 @@ app.post("/api/projects", async (req, res) => {
     }
   }
 
-  // Fallback to memory
-  memoryProjects.unshift(newProject);
-  return res.status(201).json(newProject);
+  return res.status(503).json({ error: "Supabase is required. Project was not saved locally." });
 });
 
 // 4. PUT Project (Updates project)
@@ -412,17 +312,7 @@ app.put("/api/projects/:id", async (req, res) => {
     }
   }
 
-  // Update in memory
-  const idx = memoryProjects.findIndex(p => p.id === id);
-  if (idx !== -1) {
-    memoryProjects[idx] = {
-      ...memoryProjects[idx],
-      ...projectData
-    };
-    return res.json(memoryProjects[idx]);
-  }
-
-  return res.status(404).json({ error: "Project not found" });
+  return res.status(503).json({ error: "Supabase is required. Project was not updated locally." });
 });
 
 // 5. DELETE Project
@@ -436,20 +326,13 @@ app.delete("/api/projects/:id", async (req, res) => {
       if (!error) {
         return res.json({ status: "success", message: `Deleted project ${id}` });
       }
-      console.warn("Supabase delete failed, removing from memory:", error.message);
+      return res.status(500).json({ error: error.message || "Supabase delete failed." });
     } catch (e: any) {
-      console.error("Supabase delete exception:", e.message);
+      return res.status(500).json({ error: e.message || "Supabase delete exception." });
     }
   }
 
-  // Delete in memory
-  const idx = memoryProjects.findIndex(p => p.id === id);
-  if (idx !== -1) {
-    memoryProjects.splice(idx, 1);
-    return res.json({ status: "success", message: `Deleted project ${id} from memory` });
-  }
-
-  return res.status(404).json({ error: "Project not found" });
+  return res.status(503).json({ error: "Supabase is required. Project was not deleted locally." });
 });
 
 // 6. GET Inquiries (Leads submitted by visitors)
@@ -465,12 +348,12 @@ app.get("/api/inquiries", async (req, res) => {
       if (!error && data) {
         return res.json(data);
       }
-      if (error) console.warn("Supabase inquiries query error, using memory:", error.message);
+      if (error) return res.status(500).json({ error: error.message || "Supabase inquiries query failed." });
     } catch (e) {
-      console.error("Supabase inquiries exception, using memory:", e);
+      return res.status(500).json({ error: "Supabase inquiries exception." });
     }
   }
-  return res.json(memoryInquiries);
+  return res.status(503).json({ error: "Supabase is required. Inquiries are not loaded from local fallback data." });
 });
 
 // 7. POST Inquiry (Inserts new inquiry)
@@ -500,14 +383,13 @@ app.post("/api/inquiries", async (req, res) => {
       if (!error) {
         return res.status(201).json(newInquiry);
       }
-      console.error("Supabase inquiry insert failed, using memory fallback:", error.message);
+      return res.status(500).json({ error: error.message || "Supabase inquiry insert failed." });
     } catch (e: any) {
       console.error("Supabase inquiries exception:", e.message);
     }
   }
 
-  memoryInquiries.unshift(newInquiry);
-  return res.status(201).json(newInquiry);
+  return res.status(503).json({ error: "Supabase is required. Inquiry was not saved locally." });
 });
 
 // ==========================================
@@ -623,30 +505,17 @@ app.post("/api/upload-image", async (req, res) => {
     return res.status(400).json({ error: "projectId, filename and contentBase64 are required" });
   }
 
-  const saveLocalUpload = () => {
-    fs.mkdirSync(uploadsDir, { recursive: true });
-    const safeProjectId = String(projectId).replace(/[^a-z0-9_-]/gi, "_");
-    const safeFilename = String(filename).replace(/[^a-z0-9._-]/gi, "_");
-    const filePath = path.join(uploadsDir, `${safeProjectId}_${Date.now()}_${safeFilename}`);
-    fs.writeFileSync(filePath, Buffer.from(contentBase64, "base64"));
-    const publicUrl = `/uploads/${path.basename(filePath)}`;
-    return { publicUrl, path: filePath, storage: "local" };
-  };
-
   const supabase = getSupabase();
   if (!supabase) {
-    try {
-      return res.json(saveLocalUpload());
-    } catch (e: any) {
-      console.error("Local upload fallback failed:", e.message || e);
-      return res.status(500).json({ error: "Local upload failed", details: e.message || e });
-    }
+    return res.status(503).json({ error: "Supabase Storage is required. Image was not saved locally." });
   }
 
   try {
     const buffer = Buffer.from(contentBase64, "base64");
     const bucket = "projects";
-    const path = `${projectId}/${Date.now()}_${filename}`;
+    const safeProjectId = String(projectId).replace(/[^a-z0-9_-]/gi, "_");
+    const safeFilename = String(filename).replace(/[^a-z0-9._-]/gi, "_");
+    const path = `${safeProjectId}/${Date.now()}_${safeFilename}`;
 
     const { data, error } = await supabase.storage.from(bucket).upload(path, buffer, {
       contentType: contentType || "image/jpeg",
@@ -655,19 +524,12 @@ app.post("/api/upload-image", async (req, res) => {
 
     if (error) {
       console.error("Supabase storage upload error:", error.message || error);
-      try {
-        return res.json({ ...saveLocalUpload(), warning: error.message || "Supabase storage upload failed" });
-      } catch (fallbackError: any) {
-        return res.status(500).json({
-          error: "Failed to upload to Supabase storage and local fallback.",
-          details: fallbackError.message || fallbackError,
-        });
-      }
+      return res.status(500).json({ error: "Failed to upload to Supabase storage", details: error.message || error });
     }
 
     const publicUrl = supabase.storage.from(bucket).getPublicUrl(path).data.publicUrl;
 
-    return res.json({ publicUrl, path });
+    return res.json({ publicUrl, path, storage: "supabase" });
   } catch (e: any) {
     console.error("Upload exception:", e.message);
     return res.status(500).json({ error: "Upload failed", details: e.message });

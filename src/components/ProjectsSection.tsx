@@ -2,13 +2,13 @@ import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence, useInView } from "motion/react";
 import { ArrowUpRight, Database, ExternalLink, Code2, CheckCircle, Activity, Globe, Info, Sparkles, X, Loader2 } from "lucide-react";
 import { Project } from "../types";
-import defaultProjects from "../data/defaultProjects";
 
 export default function ProjectsSection() {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [activeFilter, setActiveFilter] = useState<string>("All");
-  const [projects, setProjects] = useState<Project[]>(defaultProjects);
+  const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(false);
+  const [loadError, setLoadError] = useState("");
   
   const projectsRef = useRef(null);
   const projectsInView = useInView(projectsRef, { once: true, margin: "-100px" });
@@ -16,15 +16,16 @@ export default function ProjectsSection() {
   useEffect(() => {
     async function fetchProjects() {
       setLoading(true);
+      setLoadError("");
       try {
         const res = await fetch("/api/projects");
-        if (res.ok) {
-          const data = await res.json();
-          if (Array.isArray(data) && data.length > 0) {
-            setProjects(data);
-          }
+        const data = await res.json();
+        if (!res.ok) {
+          throw new Error(data?.error || "Failed to load projects from Supabase.");
         }
+        setProjects(Array.isArray(data) ? data : []);
       } catch (err) {
+        setLoadError(err instanceof Error ? err.message : "Failed to load projects from Supabase.");
         console.error("Failed to load projects from backend API:", err);
       } finally {
         setLoading(false);
@@ -75,9 +76,13 @@ export default function ProjectsSection() {
           <Loader2 className="h-6 w-6 animate-spin text-blue-500" />
           <span>Loading commercial blueprints...</span>
         </div>
+      ) : loadError ? (
+        <div className="py-24 text-center border border-dashed border-amber-500/30 rounded-2xl bg-amber-500/5 text-amber-200 text-xs">
+          {loadError}
+        </div>
       ) : filteredProjects.length === 0 ? (
         <div className="py-24 text-center border border-dashed border-slate-800 rounded-2xl bg-slate-950/10 text-slate-500 text-xs">
-          No matching project case studies found.
+          No project case studies found in Supabase.
         </div>
       ) : (
         <div ref={projectsRef} className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">

@@ -39,13 +39,13 @@ export default function ImageUploader({ projectId, images = [], onChange }: Imag
           body: JSON.stringify({ projectId, filename: f.name, contentBase64, contentType: f.type })
         });
 
+        const data = await res.json().catch(() => null);
         if (res.ok) {
-          const data = await res.json();
           nextImages = [...nextImages, data.publicUrl];
           notify(nextImages);
         } else {
-          const message = await res.text();
-          setUploadError(message || "Upload failed.");
+          const message = data?.details || data?.error || "Upload failed. Check Supabase Storage bucket and policies.";
+          setUploadError(message);
           console.error("Upload failed", message);
         }
       } catch (e) {

@@ -64,6 +64,8 @@ export default function AdminPage() {
       const url = isEdit ? `/api/projects/${editingProject.id}` : "/api/projects";
       const method = isEdit ? "PUT" : "POST";
       const payload = { ...editingProject } as any;
+      payload.images = Array.isArray(payload.images) ? payload.images : [];
+      payload.imageUrl = payload.images[0] || payload.imageUrl || "";
 
       if (!isEdit) {
         delete payload.id;
@@ -413,7 +415,7 @@ export default function AdminPage() {
                   </div>
                   {(supabaseStatus?.configured === false || supabaseStatus?.error || supabaseStatus?.tablesExist?.projects === false || projectLoadError) && (
                     <div className="rounded-2xl border border-amber-500/30 bg-amber-500/10 p-4 text-sm text-amber-200">
-                      <strong>Warning:</strong> Supabase is not fully connected or there is a projects load error. Changes may save only locally until you configure your Supabase environment and run the migration.
+                      <strong>Warning:</strong> Supabase is not fully connected or there is a projects load error. Changes will not be saved until Supabase tables and storage policies are configured.
                       {supabaseStatus?.error && <div className="text-xs text-amber-300 mt-2">{supabaseStatus.error}</div>}
                       {projectLoadError && <div className="text-xs text-amber-300 mt-2">{projectLoadError}</div>}
                     </div>
@@ -502,7 +504,7 @@ export default function AdminPage() {
                           <label className="text-xs font-semibold text-slate-400">Images</label>
                           <ImageUploader
                             projectId={editingProject.id || `temp-${Date.now()}`}
-                            images={editingProject.images || []}
+                            images={editingProject.images?.length ? editingProject.images : (editingProject.imageUrl ? [editingProject.imageUrl] : [])}
                             onChange={(imgs) => setEditingProject({ ...editingProject, images: imgs })}
                           />
                         </div>

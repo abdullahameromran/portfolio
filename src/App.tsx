@@ -7,7 +7,6 @@ import ProjectsSection from "./components/ProjectsSection";
 import AIAssistantSection from "./components/AIAssistantSection";
 import EstimatorSection from "./components/EstimatorSection";
 import AboutSection from "./components/AboutSection";
-import AdminSection from "./components/AdminSection";
 import AdminPage from "./pages/AdminPage";
 
 export default function App() {

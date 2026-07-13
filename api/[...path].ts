@@ -1,50 +1,5 @@
 import { createClient } from "@supabase/supabase-js";
 
-const fallbackProjects = [
-  {
-    id: "acapolite",
-    title: "Acapolite Consulting - Tax & Client Management Platform",
-    description: "A comprehensive client portal and automated tax reporting SaaS which optimizes consulting workflows.",
-    longDescription: "Acapolite Consulting is a top-tier client management and automated tax filing engine. Abdullah engineered this product on Bubble.io with complex backend schedules and custom JavaScript plug-ins.",
-    category: "Client Portal",
-    techStack: ["Bubble.io", "Custom JS Plugins", "Stripe Checkout", "PDF Rendering Engine", "SendGrid API"],
-    metrics: ["Automates 80% of client document filing"],
-    features: ["Encrypted document safe", "Stripe billing portal", "Dynamic PDF reports"],
-    dbStructure: [],
-    imageUrl: "/images/acapolite_mockup_1783694349319.jpg",
-    images: ["/images/acapolite_mockup_1783694349319.jpg"],
-    websiteUrl: "https://acapoliteconsulting.co.za/",
-  },
-  {
-    id: "genexam",
-    title: "Gen Exam Platform",
-    description: "An AI-powered academic assessment builder which instantly drafts syllabus-compliant examinations from textbooks.",
-    longDescription: "Gen Exam is a modern custom-coded Next.js SaaS designed for university departments and tutoring networks.",
-    category: "SaaS",
-    techStack: ["Next.js", "Supabase DB", "Gemini / OpenAI API", "Tailwind CSS"],
-    metrics: ["15,000+ custom assessments drafted"],
-    features: ["PDF reading pipeline", "AI question generation", "Educator analytics"],
-    dbStructure: [],
-    imageUrl: "/images/genexam_mockup_1783694362695.jpg",
-    images: ["/images/genexam_mockup_1783694362695.jpg"],
-    websiteUrl: "",
-  },
-  {
-    id: "wishergiver",
-    title: "Wisher&Giver Dashboard Store",
-    description: "A collaborative social gifting marketplace with real-time product registries and micro-merchant administration panels.",
-    longDescription: "Wisher&Giver is a collaborative gifting social-registry platform designed to link gift creators to social buyers.",
-    category: "MVP",
-    techStack: ["Bubble.io", "Stripe Connect", "n8n Automation", "Firebase Admin"],
-    metrics: ["Processed $45,000+ in wish validations"],
-    features: ["Stripe Connect onboarding", "Real-time registry tracking", "Vendor dashboards"],
-    dbStructure: [],
-    imageUrl: "/images/wishergiver_mockup_1783694374358.jpg",
-    images: ["/images/wishergiver_mockup_1783694374358.jpg"],
-    websiteUrl: "",
-  },
-];
-
 let supabaseClient: any = null;
 
 function getSupabase() {
@@ -163,7 +118,7 @@ export default async function handler(req: any, res: any) {
     }
 
     if (path === "projects" && req.method === "GET") {
-      if (!supabase) return sendJson(res, 200, fallbackProjects);
+      if (!supabase) return sendJson(res, 503, { error: "Supabase is required. Projects are not loaded from local fallback data." });
 
       const { data, error } = await supabase
         .from("projects")
