@@ -89,7 +89,11 @@ function projectToDbRow(projectData: any, id?: string) {
 
 export default async function handler(req: any, res: any) {
   const pathParam = req.query.path;
-  const path = Array.isArray(pathParam) ? pathParam.join("/") : String(pathParam || "");
+  const rawPath = Array.isArray(pathParam) ? pathParam.join("/") : String(pathParam || "");
+  const path = rawPath || String(req.url || "")
+    .split("?")[0]
+    .replace(/^\/api\/?/, "")
+    .replace(/^\/+|\/+$/g, "");
   const supabase = getSupabase();
 
   try {
