@@ -1,5 +1,5 @@
-import { useState, useEffect, useRef } from "react";
-import { motion, AnimatePresence, useInView } from "motion/react";
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "motion/react";
 import { ArrowUpRight, Database, ExternalLink, Code2, CheckCircle, Activity, Globe, Info, Sparkles, X, Loader2 } from "lucide-react";
 import { Project } from "../types";
 
@@ -10,15 +10,25 @@ export default function ProjectsSection() {
   const [loading, setLoading] = useState(false);
   const [loadError, setLoadError] = useState("");
   
-  const projectsRef = useRef(null);
-  const projectsInView = useInView(projectsRef, { once: true, margin: "-100px" });
+  const getProjectImages = (project: Project) => {
+    const allImages = [
+      ...(Array.isArray(project.images) ? project.images : []),
+      project.imageUrl || "",
+    ];
+    return Array.from(new Set(allImages.filter((img) => img && img.trim().length > 0)));
+  };
 
   useEffect(() => {
     async function fetchProjects() {
       setLoading(true);
       setLoadError("");
       try {
-        const res = await fetch("/api/projects");
+        const res = await fetch(`/api/projects?ts=${Date.now()}`, {
+          cache: "no-store",
+          headers: {
+            "Cache-Control": "no-cache",
+          },
+        });
         const data = await res.json();
         if (!res.ok) {
           throw new Error(data?.error || "Failed to load projects from Supabase.");
@@ -85,25 +95,34 @@ export default function ProjectsSection() {
           No project case studies found in Supabase.
         </div>
       ) : (
-        <div ref={projectsRef} className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
           {filteredProjects.map((project, index) => (
-            <motion.div
-              key={project.id}
-              initial={{ opacity: 0, y: 40, scale: 0.95 }}
-              animate={projectsInView ? { opacity: 1, y: 0, scale: 1 } : { opacity: 0, y: 40, scale: 0.95 }}
-              transition={{ duration: 0.6, delay: index * 0.1 }}
-              className="group flex flex-col justify-between rounded-2xl border border-slate-800/80 bg-slate-950/40 p-6 transition-all hover:border-slate-700 hover:bg-slate-900/20"
-            >
-              <div className="space-y-4">
-                {(project.images && project.images.length > 0) || project.imageUrl ? (
+            (() => {
+              const projectImages = getProjectImages(project);
+              return (
+                <motion.div
+                  key={project.id}
+                  initial={{ opacity: 0, y: 40, scale: 0.95 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  transition={{ duration: 0.6, delay: index * 0.1 }}
+                  className="group flex flex-col justify-between rounded-2xl border border-slate-800/80 bg-slate-950/40 p-6 transition-all hover:border-slate-700 hover:bg-slate-900/20"
+                >
+                  <div className="space-y-4">
+                    {projectImages.length > 0 ? (
                   <div className="relative aspect-[16/9] w-full overflow-hidden rounded-xl border border-slate-800/50 bg-slate-900/60 mb-2">
                     <img
-                      src={project.images && project.images.length > 0 ? project.images[0] : project.imageUrl}
+                      src={projectImages[0]}
                       alt={project.title}
                       referrerPolicy="no-referrer"
+                      loading="lazy"
                       className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-slate-950/40 via-transparent to-transparent" />
+                    {projectImages.length > 1 && (
+                      <span className="absolute bottom-2 right-2 rounded-md border border-slate-700 bg-slate-950/80 px-2 py-1 text-[10px] font-semibold text-slate-200">
+                        {projectImages.length} images
+                      </span>
+                    )}
                   </div>
                 ) : null}
 
@@ -158,7 +177,9 @@ export default function ProjectsSection() {
                   <Info className="h-3.5 w-3.5" />
                 </button>
               </div>
-            </motion.div>
+                </motion.div>
+              );
+            })()
           ))}
         </div>
       )}
@@ -166,6 +187,9 @@ export default function ProjectsSection() {
       {/* Case Study Detail Modal */}
       <AnimatePresence>
         {selectedProject && (
+          (() => {
+            const selectedImages = getProjectImages(selectedProject);
+            return (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 backdrop-blur-md bg-slate-950/80">
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
@@ -196,10 +220,10 @@ export default function ProjectsSection() {
                 </div>
 
                 {/* Hero Image in Modal */}
-                {(selectedProject.images && selectedProject.images.length > 0) || selectedProject.imageUrl ? (
+                {selectedImages.length > 0 ? (
                   <div className="relative aspect-[21/9] w-full overflow-hidden rounded-2xl border border-slate-800/80 bg-slate-900 shadow-xl">
                     <img
-                      src={selectedProject.images && selectedProject.images.length > 0 ? selectedProject.images[0] : selectedProject.imageUrl}
+                      src={selectedImages[0]}
                       alt={selectedProject.title}
                       referrerPolicy="no-referrer"
                       className="h-full w-full object-cover"
@@ -207,6 +231,40 @@ export default function ProjectsSection() {
                     <div className="absolute inset-0 bg-gradient-to-t from-slate-950/50 via-transparent to-transparent" />
                   </div>
                 ) : null}
+
+                {selectedImages.length > 1 && (
+                  <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+                    {selectedImages.slice(1).map((image, imageIndex) => (
+                      <a
+                        key={image}
+                        href={image}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="aspect-[16/9] overflow-hidden rounded-xl border border-slate-800 bg-slate-900 transition-all hover:border-blue-500/60"
+                      >
+                        <img
+                          src={image}
+                          alt={`${selectedProject.title} screenshot ${imageIndex + 2}`}
+                          referrerPolicy="no-referrer"
+                          loading="lazy"
+                          className="h-full w-full object-cover"
+                        />
+                      </a>
+                    ))}
+                  </div>
+                )}
+
+                {selectedProject.websiteUrl && (
+                  <a
+                    href={selectedProject.websiteUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-4 py-2 text-xs font-bold text-white transition-all hover:bg-blue-500"
+                  >
+                    Visit Live Website
+                    <ExternalLink className="h-3.5 w-3.5" />
+                  </a>
+                )}
 
                 {/* Grid Content */}
                 <div className="grid gap-6 md:grid-cols-3 border-t border-slate-800/80 pt-6">
@@ -290,6 +348,8 @@ export default function ProjectsSection() {
               </div>
             </motion.div>
           </div>
+            );
+          })()
         )}
       </AnimatePresence>
     </div>

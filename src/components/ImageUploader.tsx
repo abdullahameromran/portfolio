@@ -16,8 +16,9 @@ export default function ImageUploader({ projectId, images = [], onChange }: Imag
   }, [images, projectId]);
 
   const notify = (next: string[]) => {
-    setLocalImages(next);
-    onChange?.(next);
+    const cleanImages = next.filter((img) => img && img.trim().length > 0);
+    setLocalImages(cleanImages);
+    onChange?.(cleanImages);
   };
 
   const handleFiles = async (files: FileList | null) => {
@@ -77,10 +78,16 @@ export default function ImageUploader({ projectId, images = [], onChange }: Imag
       {uploadError && <p className="text-xs text-red-400">{uploadError}</p>}
 
       <div className="flex flex-wrap gap-2">
-        {localImages.map((img, i) => (
+        {localImages.filter(Boolean).map((img, i) => (
           <div key={i} className="relative w-28 h-20 rounded overflow-hidden border border-slate-800 bg-slate-900">
             <img src={img} alt={`img-${i}`} className="w-full h-full object-cover" />
-            <button onClick={() => removeAt(i)} className="absolute top-1 right-1 bg-black/50 text-white rounded px-1 text-xs">Remove</button>
+            <button
+              type="button"
+              onClick={() => removeAt(i)}
+              className="absolute top-1 right-1 bg-black/70 text-white rounded px-1 text-xs hover:bg-red-600"
+            >
+              Remove
+            </button>
           </div>
         ))}
       </div>
