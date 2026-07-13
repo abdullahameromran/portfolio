@@ -341,7 +341,7 @@ Reason: ${techStackRecommendation.reason}
                 {copiedInvoice ? "Quote Copied to Clipboard!" : "Copy Technical Quote"}
               </button>
               <a
-                href="https://www.upwork.com/freelancers/~017c66cb1e8f2bc5a6"
+                href="https://www.upwork.com/freelancers/~0199451d37daf25a1e?viewMode=1"
                 target="_blank"
                 rel="noreferrer"
                 className="w-full flex items-center justify-center gap-2 rounded-xl bg-blue-600 py-3 text-xs font-bold text-white transition-all hover:bg-blue-500 shadow-md shadow-blue-500/10 group"

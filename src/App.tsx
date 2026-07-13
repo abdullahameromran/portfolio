@@ -229,7 +229,7 @@ export default function App() {
                 {/* CTA/Actions (Desktop) */}
                 <div className="hidden lg:flex items-center gap-2 flex-shrink-0">
                   <a
-                    href="https://www.upwork.com/freelancers/~017c66cb1e8f2bc5a6"
+                    href="https://www.upwork.com/freelancers/~0199451d37daf25a1e?viewMode=1"
                     target="_blank"
                     rel="noreferrer"
                     className="inline-flex items-center gap-1 rounded-lg bg-blue-600 px-3 py-1.5 text-[11px] font-bold text-white transition-all hover:bg-blue-500 shadow-md shadow-blue-500/10 group whitespace-nowrap flex-shrink-0"
@@ -291,7 +291,7 @@ export default function App() {
                       {/* Mobile Hire CTA */}
                       <div className="pt-4 border-t border-slate-800/50">
                         <a
-                          href="https://www.upwork.com/freelancers/~017c66cb1e8f2bc5a6"
+                          href="https://www.upwork.com/freelancers/~0199451d37daf25a1e?viewMode=1"
                           target="_blank"
                           rel="noreferrer"
                           className="flex w-full items-center justify-center gap-2 rounded-xl bg-blue-600 py-3 text-sm font-bold text-white transition-all hover:bg-blue-500 shadow-md shadow-blue-500/10"
@@ -346,7 +346,7 @@ export default function App() {
                 {/* Quick footer indicators */}
                 <div className="flex gap-6">
                   <a
-                    href="https://www.upwork.com/freelancers/~017c66cb1e8f2bc5a6"
+                    href="https://www.upwork.com/freelancers/~0199451d37daf25a1e?viewMode=1"
                     target="_blank"
                     rel="noreferrer"
                     className="hover:text-blue-400 transition-colors"
