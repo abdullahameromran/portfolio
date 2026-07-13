@@ -10,7 +10,7 @@ export interface Project {
   title: string;
   description: string;
   longDescription: string;
-  category: 'SaaS' | 'MVP' | 'Automation' | 'AI Automation' | 'Client Portal';
+  category: string;
   techStack: string[];
   metrics: string[];
   features: string[];

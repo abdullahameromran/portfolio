@@ -45,7 +45,10 @@ export default function ProjectsSection() {
     fetchProjects();
   }, []);
 
-  const filters = ["All", "SaaS", "Client Portal", "MVP", "AI Automation"];
+  const filters = [
+    "All",
+    ...Array.from(new Set(projects.map((project) => project.category).filter(Boolean))),
+  ];
 
 
   const filteredProjects = activeFilter === "All"

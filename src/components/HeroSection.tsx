@@ -95,7 +95,7 @@ export default function HeroSection({ onNavigate }: HeroSectionProps) {
               transition={{ duration: 0.5, delay: 0.2 }}
               className="text-lg leading-relaxed text-slate-300 max-w-2xl"
             >
-              Hi, I'm <strong className="text-white">Abdullah O.</strong>, a Top Rated Plus developer. I help founders, startups, and businesses validate fast and scale towards serious revenue using <strong className="text-blue-300">Bubble.io</strong>, <strong className="text-indigo-300">Next.js</strong>, <strong className="text-emerald-300">Supabase</strong>, and <strong className="text-purple-300">AI automation</strong>.
+              Hi, I'm <strong className="text-white">Abdullah Omran</strong>, a Top Rated Plus developer. I help founders, startups, and businesses validate fast and scale towards serious revenue using <strong className="text-blue-300">Bubble.io</strong>, <strong className="text-indigo-300">Next.js</strong>, <strong className="text-emerald-300">Supabase</strong>, and <strong className="text-purple-300">AI automation</strong>.
             </motion.p>
 
             <motion.div

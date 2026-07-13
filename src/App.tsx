@@ -185,7 +185,7 @@ export default function App() {
                 <div className="flex items-center gap-3 flex-shrink-0">
                   <div className="flex flex-col">
                     <div className="flex items-center gap-2">
-                      <span className="font-display text-base font-bold tracking-tight text-white whitespace-nowrap">Abdullah O.</span>
+                      <span className="font-display text-base font-bold tracking-tight text-white whitespace-nowrap">Abdullah Omran</span>
                       <span className="relative flex h-2 w-2">
                         <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                         <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>

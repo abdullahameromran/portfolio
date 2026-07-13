@@ -10,6 +10,29 @@ import { Project } from "../types";
 import TagInput from "../components/TagInput";
 import ImageUploader from "../components/ImageUploader";
 
+const projectCategories = [
+  "SaaS",
+  "MVP",
+  "Client Portal",
+  "AI Automation",
+  "Automation",
+  "Dashboard",
+  "Admin Panel",
+  "Marketplace",
+  "E-commerce",
+  "Booking Platform",
+  "CRM",
+  "Real Estate",
+  "Education",
+  "Healthcare",
+  "FinTech",
+  "Internal Tool",
+  "Landing Page",
+  "Mobile App",
+  "Bubble.io",
+  "Next.js",
+];
+
 async function readApiJson(res: Response) {
   const contentType = res.headers.get("content-type") || "";
   const text = await res.text();
@@ -470,10 +493,9 @@ export default function AdminPage() {
                             onChange={e => setEditingProject({ ...editingProject, category: e.target.value })}
                             className="w-full rounded-xl border border-slate-800 bg-slate-900/50 p-3 text-xs text-white focus:border-blue-500 focus:outline-none"
                           >
-                            <option value="SaaS">SaaS</option>
-                            <option value="Client Portal">Client Portal</option>
-                            <option value="MVP">MVP</option>
-                            <option value="AI Automation">AI Automation</option>
+                            {projectCategories.map((category) => (
+                              <option key={category} value={category}>{category}</option>
+                            ))}
                           </select>
                         </div>
 
