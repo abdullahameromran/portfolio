@@ -61,7 +61,13 @@ export default function ProjectsSection() {
     if (!selectedProject) return;
 
     const previousOverflow = document.body.style.overflow;
+    const previousPaddingRight = document.body.style.paddingRight;
+    const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
     document.body.style.overflow = "hidden";
+    if (scrollbarWidth > 0) {
+      document.body.style.paddingRight = `${scrollbarWidth}px`;
+    }
+    document.documentElement.classList.add("modal-scrollbar-gutter");
 
     const handleKeyDown = (event: KeyboardEvent) => {
       const images = getProjectImages(selectedProject);
@@ -79,6 +85,8 @@ export default function ProjectsSection() {
     window.addEventListener("keydown", handleKeyDown);
     return () => {
       document.body.style.overflow = previousOverflow;
+      document.body.style.paddingRight = previousPaddingRight;
+      document.documentElement.classList.remove("modal-scrollbar-gutter");
       window.removeEventListener("keydown", handleKeyDown);
     };
   }, [selectedProject]);
@@ -228,7 +236,7 @@ export default function ProjectsSection() {
             const showImageControls = selectedImages.length > 1;
             return (
           <div
-            className="fixed inset-0 z-50 grid place-items-center overflow-y-auto bg-slate-950/85 p-4 py-8 backdrop-blur-md"
+            className="fixed inset-0 z-50 flex items-center justify-center overflow-hidden bg-slate-950/85 p-3 backdrop-blur-md sm:p-6"
             onMouseDown={(event) => {
               if (event.target === event.currentTarget) {
                 closeProjectModal();
@@ -239,39 +247,42 @@ export default function ProjectsSection() {
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
-              className="relative my-auto w-full max-w-5xl max-h-[calc(100vh-4rem)] overflow-y-auto rounded-3xl border border-slate-800 bg-slate-950 p-5 text-left shadow-2xl md:p-8"
+              className="relative flex w-full max-w-5xl flex-col overflow-hidden rounded-3xl border border-slate-800 bg-slate-950 text-left shadow-2xl max-h-[calc(100dvh-1.5rem)] sm:max-h-[calc(100dvh-3rem)]"
+              onWheel={(event) => event.stopPropagation()}
+              onTouchMove={(event) => event.stopPropagation()}
             >
-              {/* Close Button */}
-              <button
-                onClick={closeProjectModal}
-                className="sticky left-full top-0 z-20 -mb-10 rounded-xl border border-slate-800 bg-slate-900/90 p-2 text-slate-400 transition-all hover:bg-slate-800 hover:text-white"
-                aria-label="Close project details"
-              >
-                <X className="h-5 w-5" />
-              </button>
-
-              <div className="space-y-6">
-                {/* Header */}
-                <div className="space-y-2">
-                  <div className="flex items-center gap-2">
+              <div className="sticky top-0 z-20 flex items-start justify-between gap-4 border-b border-slate-800 bg-slate-950/95 p-5 backdrop-blur-md md:p-6">
+                <div className="min-w-0 space-y-2">
+                  <div className="flex flex-wrap items-center gap-2">
                     <span className="rounded-lg bg-blue-500/10 border border-blue-500/20 px-2.5 py-1 text-xs font-medium text-blue-300">
                       {selectedProject.category}
                     </span>
                     <span className="text-xs text-slate-500 font-mono">Case Blueprint</span>
                   </div>
-                  <h2 className="font-display text-2xl md:text-3xl font-bold text-white pr-8">
+                  <h2 className="font-display text-2xl md:text-3xl font-bold text-white">
                     {selectedProject.title}
                   </h2>
                 </div>
+                <button
+                  onClick={closeProjectModal}
+                  className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-slate-800 bg-slate-900/90 text-slate-400 transition-all hover:bg-slate-800 hover:text-white"
+                  aria-label="Close project details"
+                >
+                  <X className="h-5 w-5" />
+                </button>
+              </div>
+
+              <div className="min-h-0 flex-1 overflow-y-auto p-5 md:p-8">
+                <div className="space-y-6">
 
                 {/* Hero Image in Modal */}
                 {activeImage ? (
-                  <div className="relative aspect-[16/9] w-full overflow-hidden rounded-2xl border border-slate-800/80 bg-slate-900 shadow-xl">
+                  <div className="relative flex h-[42vh] min-h-64 w-full items-center justify-center overflow-hidden rounded-2xl border border-slate-800/80 bg-slate-900 shadow-xl">
                     <img
                       src={activeImage}
                       alt={`${selectedProject.title} screenshot ${selectedImageIndex + 1}`}
                       referrerPolicy="no-referrer"
-                      className="h-full w-full object-contain"
+                      className="max-h-full max-w-full object-contain"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-slate-950/50 via-transparent to-transparent" />
                     {showImageControls && (
@@ -416,6 +427,7 @@ export default function ProjectsSection() {
                     </div>
                   </div>
                 )}
+                </div>
               </div>
             </motion.div>
           </div>
