@@ -360,6 +360,14 @@ export default function App() {
                   >
                     GitHub Profile
                   </a>
+                  <a
+                    href="https://www.linkedin.com/in/abdullah-amer-584237224/"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="hover:text-blue-400 transition-colors"
+                  >
+                    LinkedIn
+                  </a>
                 </div>
               </div>
               <p className="text-slate-600 text-[10px] leading-relaxed max-w-lg mx-auto">
